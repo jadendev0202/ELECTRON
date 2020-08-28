@@ -1,25 +1,48 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>Socket.IO chat</title>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <script>if (window.module) module = window.module;</script>
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/socket.io-client/dist/socket.io.js"></script>
   </head>
   <body>
-  <textarea rows="20" cols="30" id="chat"></textarea><br>
-  <input type="text" id="user"><input type="button" value="msg submit" onclick="myOnClick()">
+  <textarea rows="20" cols="30" id="chat"></textarea>
+  <textarea rows="20" cols="30" id="chatt"></textarea><br>
+  <input type="text" id="user"><input type="button" value="입력" onclick="myOnClick()">
+  <input type="button" id="button1" onclick="button1_click();" value="lcd켜기" />
+  <input type="button" id="button1" onclick="button2_click();" value="led끄기" />
+  <input type="button" id="button1" onclick="button3_click();" value="시리얼데이터읽기" />
   </body>
   <script>
-  
+    var text = document.getElementById('text');
       var socket = io.connect('http://localhost:8080');
+      socket.on('rec', function (sendData) {
+          console.log(sendData)
+          $('#chatt').append(sendData);
+      });
       socket.on('recMsg', function (data) {
-          console.log(data.comment)
+          console.log(data)
           $('#chat').append(data.comment);
       });
-  
       function myOnClick() {
-          socket.emit("msg", {comment: $('#user').val()});
+          socket.emit('msg', {comment: $('#user').val()});
           $('#user').val('');
       }
+      function button1_click() {
+          socket.emit('msg1', 'a');
+          $('#user').val('');
+          }
+      function button2_click() {
+          socket.emit('msg2', 'b');
+          $('#user').val('');
+          }
+      function button3_click() {
+          socket.emit('msg3', 'c');
+          $('#user').val('');
+          }
   </script>
   </html>
